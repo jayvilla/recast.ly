@@ -9,16 +9,14 @@ var searchYouTube = (options, callback) => {
   // console.log(queryString);
   options.part = 'snippet';
   $.ajax ({
-    url: 'https://www.googleapis.com/youtube/v3/videos',
+    url: 'https://www.googleapis.com/youtube/v3/search',
     method: 'GET',
     data: options,
     contentType: 'application/json',
     success: function (data) {
-      console.log(data);
-      callback(data);
+      callback(data.items);
     },
     error: function(data) {
-      console.log('error data');
       console.log(data);
     }
 

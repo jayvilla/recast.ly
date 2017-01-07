@@ -1,23 +1,17 @@
-// var App = () => (
-//   <div>
-//     <Nav />
-//     <div className="col-md-7">
-//       <VideoPlayer/>
-//     </div>
-//     <div className="col-md-5">
-//       <VideoList/>
-//     </div>
-//   </div>
-// );
-
 class App extends React.Component {
   constructor(props) {
     super(props);
+    
     this.state = {
-      currentVideo: window.fakeVideoData[0]
+      currentVideo: window.fakeVideoData[0],
+      videoList: window.fakeVideoData
     };
+    props.searchYouTube({maxResults: 10}, this.updateVideoList.bind(this));
   }
 
+  updateVideoList(videoList) {
+    this.setState({videoList});
+  }
   onVideoClick(currentVideo) {
     this.setState({currentVideo});
   }
@@ -25,12 +19,12 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Nav />
+        <Nav changeVideoList={this.updateVideoList.bind(this)} searchYouTube={this.props.searchYouTube}/>
         <div className="col-md-7">
           <VideoPlayer video={this.state.currentVideo}/>
         </div>
         <div className="col-md-5">
-          <VideoList changeVideo={this.onVideoClick.bind(this)} videos={window.fakeVideoData}/>
+          <VideoList changeVideo={this.onVideoClick.bind(this)} videos={this.state.videoList}/>
         </div>
       </div>
     );
