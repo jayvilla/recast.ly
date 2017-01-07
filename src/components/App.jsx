@@ -4,13 +4,23 @@ class App extends React.Component {
     
     this.state = {
       currentVideo: window.fakeVideoData[0],
-      videoList: window.fakeVideoData
+      videoList: window.fakeVideoData,
+      initialLoad: true
     };
-    props.searchYouTube({maxResults: 10}, this.updateVideoList.bind(this));
+    console.log(window.YOUTUBE_API_KEY);
+    props.searchYouTube({
+      key: window.YOUTUBE_API_KEY,
+      q: 'react',
+      maxResults: 5,
+      type: 'video'
+    }, this.updateVideoList.bind(this));
   }
 
   updateVideoList(videoList) {
     this.setState({videoList});
+    if (this.state.initialLoad) {
+      this.setState({initialLoad: false, currentVideo: videoList[0]});
+    }
   }
   onVideoClick(currentVideo) {
     this.setState({currentVideo});

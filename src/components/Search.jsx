@@ -12,7 +12,7 @@ class Search extends React.Component {
     super(props);
   }
   onSearchChange() {
-    this.props.searchYouTube({maxResults: 10}, this.props.changeVideoList);
+    this.props.searchYouTube({key: window.YOUTUBE_API_KEY, maxResults: 5}, this.props.changeVideoList);
   }
   render () {
     return (

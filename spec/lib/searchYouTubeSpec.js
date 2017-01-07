@@ -56,11 +56,11 @@ describe('searchYouTube', function() {
   });
 
   it('should accept `key`, `query`, and `max` options and send them in GET request', function() {
-    searchYouTube({ key: 'API_KEY', query: 'cats', maxResults: 10 }, () => {});
+    searchYouTube({ key: 'API_KEY', q: 'cats', maxResults: 10 }, () => {});
 
     var params = getURLSearchParams(requests[0].url);
     expect(params.key).to.equal('API_KEY');
-    expect(params.query).to.equal('cats');
+    expect(params.q).to.equal('cats');
     expect(params.maxResults).to.equal('10');
   });
 
