@@ -7,12 +7,12 @@ class App extends React.Component {
       videoList: window.fakeVideoData,
       initialLoad: true
     };
-    console.log(window.YOUTUBE_API_KEY);
     props.searchYouTube({
       key: window.YOUTUBE_API_KEY,
       q: 'react',
       maxResults: 5,
-      type: 'video'
+      type: 'video',
+      videoembeddable: true
     }, this.updateVideoList.bind(this));
   }
 

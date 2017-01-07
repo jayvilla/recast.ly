@@ -10,14 +10,16 @@
 class Search extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {value: ''};
   }
-  onSearchChange() {
-    this.props.searchYouTube({key: window.YOUTUBE_API_KEY, maxResults: 5}, this.props.changeVideoList);
+  handleChange(event) {
+    this.setState({value: event.target.value});
+    this.props.searchYouTube({key: window.YOUTUBE_API_KEY, maxResults: 5, type: 'video', videoembeddable: true, q: this.state.value}, this.props.changeVideoList);
   }
   render () {
     return (
       <div className="search-bar form-inline">
-        <input className="form-control" onChange={this.onSearchChange.bind(this)} type="text" />
+        <input className="form-control" value={this.state.value} onChange={this.handleChange.bind(this)} type="text" />
         <button className="btn hidden-sm-down">
           <span className="glyphicon glyphicon-search"></span>
         </button>
