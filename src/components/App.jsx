@@ -5,25 +5,51 @@ class App extends React.Component {
     this.state = {
       currentVideo: window.fakeVideoData[0],
       videoList: window.fakeVideoData,
-      initialLoad: true
+      initialLoad: true,
+      autoplay: false,
+      statistics: {}
     };
-    props.searchYouTube({
+
+  }
+
+  componentWillMount() {
+    this.props.searchYouTube({
       key: window.YOUTUBE_API_KEY,
       q: 'react',
       maxResults: 5,
-      type: 'video',
-      videoembeddable: true
     }, this.updateVideoList.bind(this));
+  }
+  switchAutoplay () {
+    this.setState({autoplay: !this.state.autoplay});
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.autoplay !== nextState.autoplay) {
+      return false;
+    }
+    return true;
+  }
+
+  updateCurrentVideoStats(statistics) {
+    this.setState({statistics});
   }
 
   updateVideoList(videoList) {
     this.setState({videoList});
     if (this.state.initialLoad) {
       this.setState({initialLoad: false, currentVideo: videoList[0]});
+      this.props.searchYouTubeViews({
+        key: window.YOUTUBE_API_KEY,
+        id: this.state.currentVideo.id.videoId,
+      }, this.updateCurrentVideoStats.bind(this));
     }
   }
   onVideoClick(currentVideo) {
     this.setState({currentVideo});
+    this.props.searchYouTubeViews({
+      key: window.YOUTUBE_API_KEY,
+      id: this.state.currentVideo.id.videoId,
+    }, this.updateCurrentVideoStats.bind(this));
   }
 
   render() {
@@ -31,12 +57,19 @@ class App extends React.Component {
       <div>
         <Nav changeVideoList={this.updateVideoList.bind(this)} searchYouTube={this.props.searchYouTube}/>
         <div className="col-md-7">
-          <VideoPlayer video={this.state.currentVideo}/>
+          <VideoPlayer autoplay={this.state.autoplay} statistics={this.state.statistics} video={this.state.currentVideo}/>
         </div>
+        <label>
+          Autoplay 
+          <input onChange={this.switchAutoplay.bind(this)} type="checkbox" />
+          <div />
+        </label>
         <div className="col-md-5">
           <VideoList changeVideo={this.onVideoClick.bind(this)} videos={this.state.videoList}/>
         </div>
+
       </div>
+
     );
   }
 }
