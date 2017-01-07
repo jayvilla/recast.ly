@@ -12,9 +12,12 @@ class Search extends React.Component {
     super(props);
     this.state = {value: ''};
   }
+  debounceYoutube () {
+    this.props.searchYouTube({key: window.YOUTUBE_API_KEY, maxResults: 5, type: 'video', videoembeddable: true, q: this.state.value}, this.props.changeVideoList);
+  }
   handleChange(event) {
     this.setState({value: event.target.value});
-    this.props.searchYouTube({key: window.YOUTUBE_API_KEY, maxResults: 5, type: 'video', videoembeddable: true, q: this.state.value}, this.props.changeVideoList);
+    _.debounce(this.debounceYoutube.bind(this), 500)();
   }
   render () {
     return (
